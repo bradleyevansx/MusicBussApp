@@ -31,30 +31,13 @@ html {
 .standard-text {
   @apply text-sm sm:text-sm md:text-base lg:text-lg font-medium;
 }
-@keyframes slide-up {
-  0% {
-    transform: translateY(30px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+
+.out {
+  transform: translateY(30px);
+  transition: transform 0.4s ease-in-out;
 }
 
-@keyframes slide-down {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(30px);
-  }
-}
-
-.slide-up {
-  animation: slide-up 0.4s ease-in-out;
-  animation-fill-mode: forwards;
-}
-
-.slide-down {
-  animation: slide-down 0.4s ease-in-out;
-  animation-fill-mode: forwards;
+.in {
+  transform: translateX(0);
+  transition: transform 0.4s ease-in-out;
 }

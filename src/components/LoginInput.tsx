@@ -23,15 +23,11 @@ const LoginInput = ({ type, onChange }: Props) => {
 
   return (
     <>
-      <div
-        className={`${
-          isVisible || inputValue !== "" ? "slide-up" : "slide-down"
-        }`}
-      >
+      <div className={`${isVisible || inputValue !== "" ? "in" : "out"}`}>
         <label className={`text-zinc-200 z-10 mb-2`}>{type}</label>
       </div>
       <input
-        type="text"
+        type={`${type === "Password" ? "password" : "text"}`}
         required
         placeholder={isVisible ? "" : type}
         onFocus={toggleVisibility}
