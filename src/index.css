@@ -8,7 +8,7 @@ html {
 }
 
 .container-colors {
-  @apply border border-zinc-600 rounded-lg bg-zinc-800 rounded-lg;
+  @apply border border-zinc-600 bg-zinc-800 rounded-lg;
 }
 
 .primary-btn {

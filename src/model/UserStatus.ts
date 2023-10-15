@@ -11,7 +11,7 @@ export const userStatusDisplayNames: Record<UserStatus, string> = {
 };
 
 export const userStatusColorValues: Record<UserStatus, string> = {
-  [UserStatus.Active]: "green",
-  [UserStatus.OnHold]: "yellow",
-  [UserStatus.Inactive]: "red",
+  [UserStatus.Active]: "text-green-300",
+  [UserStatus.OnHold]: "text-yellow-300",
+  [UserStatus.Inactive]: "text-red-300",
 };

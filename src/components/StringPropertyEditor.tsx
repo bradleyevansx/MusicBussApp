@@ -2,21 +2,18 @@ import { useRef, useState } from "react";
 import ConfirmIntent from "./ConfirmIntent";
 
 interface Props {
-  title: string;
-  oldValue: string;
-  onSubmit: (newVal: string, oldValue: string) => void;
+  propertyBeingChanged: string;
+  onSubmit: (newVal: string, intent: boolean) => void;
 }
 
-const StringPropertyEditor = ({ title, oldValue, onSubmit }: Props) => {
+const StringPropertyEditor = ({ propertyBeingChanged, onSubmit }: Props) => {
   const [modalIsShown, setModalIsShown] = useState(false);
   const newValueRef = useRef<HTMLInputElement | null>(null);
   const [newValue, setNewValue] = useState<string | null>(null);
 
   const checkIntent = (intent: boolean) => {
     if (intent && newValue) {
-      onSubmit(newValue, oldValue);
-    } else {
-      onSubmit(oldValue, oldValue);
+      onSubmit(newValue, intent);
     }
 
     setModalIsShown(false);
@@ -31,7 +28,9 @@ const StringPropertyEditor = ({ title, oldValue, onSubmit }: Props) => {
 
   return (
     <div className="container-colors w-fit flex-col p-5 space-y-5">
-      <h4 className="w-fit text-sky-300 text-3xl mx-auto">{title}</h4>
+      <h4 className="w-fit text-sky-300 text-3xl mx-auto">
+        Set new {propertyBeingChanged}:
+      </h4>
       <input
         ref={newValueRef}
         id="newValue"

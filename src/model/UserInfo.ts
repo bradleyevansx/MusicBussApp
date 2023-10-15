@@ -9,13 +9,13 @@ export interface UserInfo {
     lastName: string;
     fullName: string;
   };
-  username: string | null;
-  password: string | null;
+  username: string;
+  password: string;
   partitionKey: string;
   teacherIds: string[];
   parentIds: string[];
   studentIds: string[];
   id: string;
   createdDateTime: string;
-  email: string | null;
+  email: string;
 }

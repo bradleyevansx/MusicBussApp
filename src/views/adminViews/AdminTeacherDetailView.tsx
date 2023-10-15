@@ -8,6 +8,7 @@ import {
   userStatusDisplayNames,
 } from "../../model/UserStatus";
 import AdminService from "../../services/adminService";
+import { findPropertyByValueAndChange } from "../../utilities/propertySetter";
 
 const AdminTeacherDetailView = () => {
   const textStyles =
@@ -15,7 +16,7 @@ const AdminTeacherDetailView = () => {
   const spanStyles = "flex gap-1";
 
   const [teacher, setTeacher] = useState<UserInfo | null>(null);
-  const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState<string[] | null>(null);
   const { userId } = useParams();
   const adminService = new AdminService();
 
@@ -31,51 +32,31 @@ const AdminTeacherDetailView = () => {
 
   if (!teacher) return null;
 
-  function findPropertyByValueAndChange(
-    teacher: UserInfo,
-    newValue: string,
-    oldValue: string
-  ) {
-    if (oldValue === newValue) {
-      setIsEditing(null);
-    }
-
-    let propertyName: keyof UserInfo | null = null;
-
-    if (isEditing) {
-      for (const key in teacher) {
-        if (typeof key === "string") {
-          if (teacher[key as keyof UserInfo] === oldValue) {
-            propertyName = key as keyof UserInfo;
-            break;
-          }
-        }
+  const updateTeacher = (newValue: string, intent: boolean) => {
+    if (isEditing !== null && intent) {
+      const updatedTeacher = findPropertyByValueAndChange(
+        teacher,
+        newValue,
+        isEditing[1]
+      );
+      if (updatedTeacher === null) {
+        setIsEditing(null);
+        return;
+      } else {
+        adminService
+          .updateUserAsync(updatedTeacher)
+          .then((res) => setTeacher(res));
+        setIsEditing(null);
       }
     }
-
-    if (propertyName !== null) {
-      const updatedTeacher = {
-        ...teacher,
-        [propertyName]: newValue,
-      };
-
-      adminService
-        .updateUserAsync(updatedTeacher)
-        .then((res) => setTeacher(res));
-
-      setIsEditing(null);
-    }
-  }
+  };
 
   return (
     <PageContainer>
-      {isEditing && (
+      {isEditing !== null && (
         <StringPropertyEditor
-          onSubmit={(newValue, oldValue) =>
-            findPropertyByValueAndChange(teacher, newValue, oldValue)
-          }
-          oldValue={isEditing}
-          title={isEditing}
+          onSubmit={(newValue, intent) => updateTeacher(newValue, intent)}
+          propertyBeingChanged={isEditing[0]}
         />
       )}
       <div className="container-colors w-fit p-5">
@@ -83,7 +64,7 @@ const AdminTeacherDetailView = () => {
           <h2 className="text-indigo-200 text-4xl tracking-wider flex">
             {teacher.person.fullName}
           </h2>
-          <span className="ml-3 mt-auto bg-zinc-700 py-.5 px-1  rounded">
+          <span className="ml-3 bg-zinc-700 py-.5 px-1 h-fit  rounded">
             <h2 className="text-green-300 text-2xl tracking-wider flex">
               {teacher.studentIds.length}
             </h2>
@@ -92,14 +73,19 @@ const AdminTeacherDetailView = () => {
         <span className={spanStyles}>
           <p
             className={textStyles}
-            onClick={() => setIsEditing(teacher.username)}
+            onClick={() => setIsEditing(["username", teacher.username])}
           >
             Username:
           </p>
           <p className="text-xl text-zinc-300">{teacher.username}</p>
         </span>
         <span className={`${spanStyles} items-center`}>
-          <p className={textStyles}>Password:</p>
+          <p
+            className={textStyles}
+            onClick={() => setIsEditing(["password:", teacher.password])}
+          >
+            Password:
+          </p>
           <p className="text-xl text-zinc-300">
             {showPassword
               ? teacher.password
@@ -114,20 +100,23 @@ const AdminTeacherDetailView = () => {
         </span>
         <span className={spanStyles}>
           <p className={textStyles}>User Status:</p>
-          <p
-            className={`text-xl text-${
-              userStatusColorValues[teacher.userStatus]
-            }-300`}
-          >
+          <p className={`text-xl ${userStatusColorValues[teacher.userStatus]}`}>
             {userStatusDisplayNames[teacher.userStatus]}
           </p>
         </span>
         <span className={spanStyles}>
-          <p className={textStyles}>Email:</p>
           <p
-            className={`text-${teacher.email ? "zinc-300" : "red-400"} text-xl`}
+            className={textStyles}
+            onClick={() => setIsEditing(["email", teacher.email])}
           >
-            {teacher.email ? teacher.email : "User has no email"}
+            Email:
+          </p>
+          <p
+            className={`${
+              teacher.email ? "text-zinc-300" : "text-red-400"
+            } text-xl`}
+          >
+            {teacher.email !== "" ? teacher.email : "User has no email"}
           </p>
         </span>
       </div>
