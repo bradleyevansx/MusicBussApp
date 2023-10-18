@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { UserInfo } from "../model/UserInfo";
 import AdminService from "../services/adminService";
-import { useNavigate } from "react-router-dom";
 
 interface Props {
+  onSelected: (user: UserInfo) => void;
   userEndpoint: string;
 }
 
-const AdminUserList = ({ userEndpoint }: Props) => {
+const AdminUserList = ({ userEndpoint, onSelected }: Props) => {
   const [users, setUsers] = useState<UserInfo[] | null>(null);
-  const navigate = useNavigate();
   useEffect(() => {
     const adminService = new AdminService();
 
@@ -34,8 +33,11 @@ const AdminUserList = ({ userEndpoint }: Props) => {
             <li key={user.id}>
               <button
                 onClick={() => {
-                  navigate(`/admin/${userEndpoint}/${user.id}`);
+                  onSelected(user);
                 }}
+                // onClick={() => {
+                //   navigate(`/admin/${userEndpoint}/${user.id}`);
+                // }}
                 className="w-full flex align-middle justify-between px-2 py-3 hover:bg-zinc-700 rounded hover:cursor-pointer focus:bg-zinc-900 focus:text-zinc-200"
               >
                 <span>{user.person.fullName}</span>

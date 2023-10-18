@@ -21,9 +21,7 @@ const StringPropertyEditor = ({ propertyBeingChanged, onSubmit }: Props) => {
 
   if (modalIsShown)
     return (
-      <ConfirmIntent
-        onConfirm={(intent) => checkIntent(intent)}
-      ></ConfirmIntent>
+      <ConfirmIntent onIntent={(intent) => checkIntent(intent)}></ConfirmIntent>
     );
 
   return (

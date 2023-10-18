@@ -1,25 +1,30 @@
+import Modal from "./Modal";
+
 interface Props {
-  onConfirm: (intent: boolean) => void;
+  onIntent: (intent: boolean) => void;
+  isVisible: boolean;
 }
 
-const ConfirmIntent = ({ onConfirm }: Props) => {
+const ConfirmIntent = ({ onIntent, isVisible }: Props) => {
+  if (!isVisible) return null;
+
   return (
-    <div className="container-colors w-fit p-5 space-y-5">
+    <Modal showCloseButton={false} isVisible={isVisible}>
       <h4 className="text-zinc-100 text-4xl">Are you sure?</h4>
       <div className="flex justify-center space-x-4 w-full">
-        <button className="green-btn" onClick={() => onConfirm(true)}>
-          Confirm
-        </button>
         <button
           onClick={() => {
-            onConfirm(false);
+            onIntent(false);
           }}
           className="red-btn"
         >
           Cancel
         </button>
+        <button className="green-btn" onClick={() => onIntent(true)}>
+          Confirm
+        </button>
       </div>
-    </div>
+    </Modal>
   );
 };
 

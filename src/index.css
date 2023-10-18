@@ -11,6 +11,14 @@ html {
   @apply border border-zinc-600 bg-zinc-800 rounded-lg;
 }
 
+.card-1 {
+  @apply bg-zinc-800 rounded-lg border shadow-md shadow-zinc-900 p-5;
+}
+
+.danger-btn {
+  @apply p-3 text-white bg-red-600 rounded-lg hover:bg-red-700 focus:bg-red-800;
+}
+
 .primary-btn {
   @apply py-1 px-3 border border-transparent standard-text  rounded-md text-white bg-zinc-700 hover:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 focus:bg-zinc-900;
 }
